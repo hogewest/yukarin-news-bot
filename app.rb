@@ -6,6 +6,10 @@ require './story'
 require './crawler'
 require 'logger'
 
+configure :production do
+  require "newrelic_rpm"
+end
+
 Log = Logger.new(STDOUT)
 
 INTERVAL = 60 * 60 * 4

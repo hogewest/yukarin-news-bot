@@ -7,3 +7,8 @@ gem "mechanize"
 gem "thin"
 gem "redis"
 gem "twitter"
+
+group :production do
+  gem 'newrelic_rpm'
+end
+
