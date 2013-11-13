@@ -7,7 +7,8 @@ require 'logger'
 require './story'
 require './crawler'
 
-Log = Logger.new(STDOUT)
+LOG = Logger.new(STDOUT)
+LOG.level = Logger.const_get ENV['LOG_LEVEL'] || 'DEBUG'
 POST_TIME_KEY = 'POST_TIME'
 
 configure :production do
@@ -39,7 +40,6 @@ end
 EM::defer do
   crawler = Crawler.new
   loop do
-    sleep(5)
     if post_time < Time.now
       stories = crawler.elements.map do |element|
         result = []
@@ -55,15 +55,17 @@ EM::defer do
       stories.flatten.reverse.each do |story|
         if (!REDIS.exists(story.key))
           REDIS.set(story.key, story.to_json)
-          Log.info story.key + ':' + story.tweet
+          LOG.info story.key + ':' + story.tweet
           Twitter.update(story.tweet)
         else
-          Log.info "exists key:" + story.key
+          LOG.info "exists key:" + story.key
         end
       end
 
       post_time = Time.now + INTERVAL
       REDIS.set(POST_TIME_KEY, post_time.strftime('%Y/%m/%d %X'))
     end
+
+    sleep(5)
   end
 end
