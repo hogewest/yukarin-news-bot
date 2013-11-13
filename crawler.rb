@@ -10,8 +10,8 @@ class Crawler
   def elements
     begin
       page = @mechanize.get(YUKARIN_URL)
-    rescue Mechanize::ResponseCodeError => e
-      puts e
+    rescue
+      $logger.error $!
     end
     return [] if page.nil?
     page.search('#news > dl')
