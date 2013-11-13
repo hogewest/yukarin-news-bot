@@ -1,7 +1,7 @@
 require 'mechanize'
 
 class Crawler
-  YUKARIN_URL = 'http://tamurayukari.com'
+  YUKARIN_URL = 'http://www.tamurayukari.com'
 
   def initialize
     @mechanize = Mechanize.new

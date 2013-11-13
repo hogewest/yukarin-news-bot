@@ -4,11 +4,16 @@ require 'json'
 class Story
   attr_accessor :title, :content, :url
   MAX_TWEET_SIZE = 140
+  YUKARIN_PAGE_TOP = 'http://www.tamurayukari.com/'
 
   def initialize(title, content, url)
     @title = title
     @content = content
-    @url = url
+    if url.start_with? YUKARIN_PAGE_TOP
+      @url = url
+    else
+      @url = YUKARIN_PAGE_TOP + url
+    end
   end
 
   def key
