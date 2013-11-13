@@ -42,12 +42,17 @@ EM::defer do
     sleep(5)
     if post_time < Time.now
       stories = crawler.elements.map do |element|
+        result = []
         title = element.search('dt').first.content
-        content = element.search('a').first.content
-        url = element.search('a').first.attribute('href').value
-        Story.new(title, content, url)
+
+        element.search('a').each do |a|
+          content = a.content
+          url = a.attribute('href').value
+          result << Story.new(title, content, url)
+        end
+        result
       end
-      stories.reverse.each do |story|
+      stories.flatten.reverse.each do |story|
         if (!REDIS.exists(story.key))
           REDIS.set(story.key, story.to_json)
           Log.info story.key + ':' + story.tweet
