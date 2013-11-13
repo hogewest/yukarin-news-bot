@@ -2,21 +2,28 @@ require 'sinatra'
 require 'eventmachine'
 require 'redis'
 require 'twitter'
+require 'time'
+require 'logger'
 require './story'
 require './crawler'
-require 'logger'
-
-configure :production do
-  require "newrelic_rpm"
-end
 
 Log = Logger.new(STDOUT)
+POST_TIME_KEY = 'POST_TIME'
 
-INTERVAL = 60 * 60 * 4
-post_time = Time.now + INTERVAL
+configure :production do
+  require 'newrelic_rpm'
+end
 
 uri = URI.parse(ENV['REDISTOGO_URL'] || 'localhost:6379')
 REDIS = Redis.new(:host => uri.host, :port => uri.port, :password => uri.password)
+
+INTERVAL = 60 * 60 * 2
+if (REDIS.exists(POST_TIME_KEY))
+  post_time = Time.parse(REDIS.get(POST_TIME_KEY))
+else
+  post_time = Time.now + INTERVAL
+  REDIS.set(POST_TIME_KEY, post_time.strftime('%Y/%m/%d %X'))
+end
 
 Twitter.configure do |config|
   config.consumer_key = ENV['TWITTER_CONSUMER_KEY'] || 'YOUR_CONSUMER_KEY'
@@ -32,11 +39,11 @@ end
 EM::defer do
   crawler = Crawler.new
   loop do
-    sleep(1)
+    sleep(5)
     if post_time < Time.now
       stories = crawler.elements.map do |element|
         title = element.search('dt').first.content
-        content = element.search('dd').first.content
+        content = element.search('a').first.content
         url = element.search('a').first.attribute('href').value
         Story.new(title, content, url)
       end
@@ -49,7 +56,9 @@ EM::defer do
           Log.info "exists key:" + story.key
         end
       end
+
       post_time = Time.now + INTERVAL
+      REDIS.set(POST_TIME_KEY, post_time.strftime('%Y/%m/%d %X'))
     end
   end
 end

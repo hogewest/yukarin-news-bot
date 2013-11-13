@@ -16,11 +16,11 @@ class Story
   end
 
   def tweet
-    msg = "#{title} #{content} #{url}"
+    msg = "#{content} #{url}"
     return msg if msg.length <= MAX_TWEET_SIZE
 
     over_size = msg.length - MAX_TWEET_SIZE
-    msg = "#{title} #{content} "
+    msg = "#{content} "
     msg.slice(0...(msg.length - over_size - 1)) + " #{url}"
   end
 
