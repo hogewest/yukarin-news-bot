@@ -40,7 +40,7 @@ EM::defer do
         url = element.search('a').first.attribute('href').value
         Story.new(title, content, url)
       end
-      stories.each do |story|
+      stories.reverse.each do |story|
         if (!REDIS.exists(story.key))
           REDIS.set(story.key, story.to_json)
           Log.info story.key + ':' + story.tweet
