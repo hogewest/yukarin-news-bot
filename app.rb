@@ -44,7 +44,7 @@ EM::defer do
         if (!REDIS.exists(story.key))
           REDIS.set(story.key, story.to_json)
           Log.info story.key + ':' + story.tweet
-          Twitter.update(story.tweet + " test")
+          Twitter.update(story.tweet)
         else
           Log.info "exists key:" + story.key
         end
