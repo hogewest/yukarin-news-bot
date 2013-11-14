@@ -4,16 +4,12 @@ require 'json'
 class Story
   attr_accessor :title, :content, :url
   MAX_TWEET_SIZE = 140
-  YUKARIN_PAGE_TOP = 'http://www.tamurayukari.com/'
+  YUKARIN_TOP_PAGE_URL = 'http://www.tamurayukari.com/'
 
   def initialize(title, content, url)
     @title = title
     @content = content
-    if url.start_with? YUKARIN_PAGE_TOP
-      @url = url
-    else
-      @url = YUKARIN_PAGE_TOP + url
-    end
+    @url = url.start_with?(YUKARIN_TOP_PAGE_URL) ? url : YUKARIN_TOP_PAGE_URL + url
   end
 
   def key
@@ -30,10 +26,6 @@ class Story
   end
 
   def to_json
-    hash = {}
-    hash[:title] = title
-    hash[:content] = content
-    hash[:url] = url
-    hash.to_json
+    {title: title, content: content, url: url}.to_json
   end
 end
