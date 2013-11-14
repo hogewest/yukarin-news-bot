@@ -42,15 +42,13 @@ EM::defer do
   loop do
     if post_time < Time.now
       stories = crawler.elements.map do |element|
-        result = []
         title = element.search('dt').first.content
 
-        element.search('a').each do |a|
+        element.search('a').map do |a|
           content = a.content
           url = a.attribute('href').value
-          result << Story.new(title, content, url)
+          Story.new(title, content, url)
         end
-        result
       end
       stories.flatten.reverse.each do |story|
         if (!$cache.exists(story.key))
