@@ -3,7 +3,7 @@ require 'json'
 
 class Story
   attr_accessor :title, :content, :url
-  MAX_TWEET_SIZE = 140
+  MAX_TWEET_SIZE = 118 #http:118 https:117
   YUKARIN_TOP_PAGE_URL = 'http://www.tamurayukari.com/'
 
   def initialize(title, content, url)
@@ -17,12 +17,11 @@ class Story
   end
 
   def tweet
-    msg = "#{content} #{url}"
-    return msg if msg.length <= MAX_TWEET_SIZE
+    msg = "#{content} "
+    return msg + url if msg.length <= MAX_TWEET_SIZE
 
     over_size = msg.length - MAX_TWEET_SIZE
-    msg = "#{content} "
-    msg.slice(0...(msg.length - over_size - 1)) + " #{url}"
+    msg.slice(0...(msg.length - over_size - 2)) + "… #{url}"
   end
 
   def to_json
