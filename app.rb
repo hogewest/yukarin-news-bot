@@ -46,9 +46,9 @@ EM::defer do
     if post_time < Time.now
       crawler.stories.each do |story|
         if (REDIS.exists(story.key))
-          LOG.info "exists key:" + story.key
+          LOG.info("exists key:#{story.key}")
         else
-          LOG.info story.key + ':' + story.tweet
+          LOG.info("#{story.key}:#{story.tweet}")
           REDIS.set(story.key, story.to_json)
           Twitter.update(story.tweet)
         end
