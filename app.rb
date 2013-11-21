@@ -27,7 +27,7 @@ else
   REDIS.set(POST_TIME_KEY, post_time.strftime('%Y/%m/%d %X'))
 end
 
-twitter = Twitter::REST::Client.new do |config|
+TWITTER = Twitter::REST::Client.new do |config|
   config.consumer_key = ENV['TWITTER_CONSUMER_KEY'] || 'YOUR_CONSUMER_KEY'
   config.consumer_secret = ENV['TWITTER_CONSUMER_SECRET'] || 'YOUR_CONSUMER_SECRET'
   config.oauth_token = ENV['TWITTER_OAUTH_TOKEN'] || 'YOUR_OAUTH_TOKEN'
@@ -50,7 +50,7 @@ EM::defer do
         else
           LOG.info("#{story.key}:#{story.tweet}")
           REDIS.set(story.key, story.to_json)
-          twitter.update(story.tweet)
+          TWITTER.update(story.tweet)
         end
       end
       post_time = Time.now + INTERVAL
