@@ -18,7 +18,7 @@ class Crawler
       @logger.error $! unless @logger.nil?
     end
     return [] if page.nil?
-    page.search('#news > dl')
+    page.nil? ? [] : page.search('#news > dl')
   end
 
   def stories
