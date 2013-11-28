@@ -17,7 +17,6 @@ class Crawler
     rescue
       @logger.error $! unless @logger.nil?
     end
-    return [] if page.nil?
     page.nil? ? [] : page.search('#news > dl')
   end
 
