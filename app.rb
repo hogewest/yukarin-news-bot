@@ -4,7 +4,6 @@ require 'redis'
 require 'twitter'
 require 'time'
 require 'logger'
-require './story'
 require './crawler'
 
 configure :production do

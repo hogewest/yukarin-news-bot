@@ -1,4 +1,5 @@
 require 'mechanize'
+require './story'
 
 class Crawler
   YUKARIN_URL = 'http://www.tamurayukari.com'
