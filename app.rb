@@ -52,6 +52,7 @@ EM::defer do
           begin
             TWITTER.update(story.tweet)
           rescue
+            LOG.error("error story:" + story.to_json)
             LOG.error($!)
           end
         end
