@@ -49,7 +49,11 @@ EM::defer do
         else
           LOG.info("#{story.key}:#{story.tweet}")
           REDIS.set(story.key, story.to_json)
-          TWITTER.update(story.tweet)
+          begin
+            TWITTER.update(story.tweet)
+          rescue
+            LOG.error($!)
+          end
         end
       end
       post_time = Time.now + INTERVAL
