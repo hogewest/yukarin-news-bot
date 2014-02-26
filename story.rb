@@ -5,7 +5,7 @@ class Story
   attr_accessor :title, :content, :url
 
   YUKARIN_TOP_PAGE_URL = 'http://www.tamurayukari.com/'
-  MAX_TWEET_SIZE = 118 #http:118 https:117
+  MAX_TWEET_SIZE = 117 #http:118 https:117
   SCHEMES = [
     'http://',
     'https://'
