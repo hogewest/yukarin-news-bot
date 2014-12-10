@@ -22,7 +22,7 @@ class Crawler
   end
 
   def stories
-    results = elements.reverse.map do |element|
+    results = elements.map do |element|
       title = element.search('dt').first.content
 
       element.search('a').map do |a|
@@ -31,6 +31,6 @@ class Crawler
         Story.new(title, content, url)
       end
     end
-    results.flatten
+    results.flatten.reverse
   end
 end
