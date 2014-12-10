@@ -23,12 +23,16 @@ class Crawler
 
   def stories
     results = elements.map do |element|
-      title = element.search('dt').first.content
+      titles = element.search('dt').map do |dt|
+        dt.content
+      end
 
-      element.search('a').map do |a|
-        content = a.content
-        url = a.attribute('href').value
-        Story.new(title, content, url)
+      contents = element.search('a').map do |a|
+        {value: a.content, url: a.attribute('href').value}
+      end
+
+      titles.zip(contents).map do |title, content|
+        Story.new(title, content[:value], content[:url])
       end
     end
     results.flatten.reverse
