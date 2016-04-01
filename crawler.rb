@@ -23,8 +23,8 @@ class Crawler
 
   def stories
     results = elements.map do |element|
-      titles = element.search('th').map do |dt|
-        dt.content
+      titles = element.search('th').map do |th|
+        th.content
       end
 
       contents = element.search('a').map do |a|
