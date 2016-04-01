@@ -18,12 +18,12 @@ class Crawler
     rescue
       @logger.error $! unless @logger.nil?
     end
-    page.nil? ? [] : page.search('#news > dl')
+    page.nil? ? [] : page.search('#news_table tr')
   end
 
   def stories
     results = elements.map do |element|
-      titles = element.search('dt').map do |dt|
+      titles = element.search('th').map do |dt|
         dt.content
       end
 
