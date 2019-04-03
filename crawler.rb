@@ -2,7 +2,7 @@ require 'mechanize'
 require './story'
 
 class Crawler
-  YUKARIN_URL = 'http://www.tamurayukari.com'
+  YUKARIN_URL = 'https://www.tamurayukari.com'
 
   def initialize
     @mechanize = Mechanize.new
@@ -18,17 +18,17 @@ class Crawler
     rescue
       @logger.error $! unless @logger.nil?
     end
-    page.nil? ? [] : page.search('#news_table tr')
+    page.nil? ? [] : page.search('.list')
   end
 
   def stories
     results = elements.map do |element|
-      titles = element.search('th').map do |th|
-        th.content
+      titles = element.search('time').map do |e|
+        e.content
       end
 
-      contents = element.search('a').map do |a|
-        {value: a.content, url: a.attribute('href').value}
+      contents = element.search('a').map do |e|
+        {value: e.search('h3').first.content, url: e.attribute('href').value}
       end
 
       titles.zip(contents).map do |title, content|
