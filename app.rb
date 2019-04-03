@@ -51,6 +51,7 @@ EM::defer do
           REDIS.set(story.key, story.to_json)
           begin
             TWITTER.update(story.tweet)
+            sleep(5)
           rescue
             LOG.error("error story:" + story.to_json)
             LOG.error($!)
