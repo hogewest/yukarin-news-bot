@@ -13,7 +13,7 @@ end
 LOG = Logger.new(STDOUT)
 LOG.level = Logger.const_get ENV['LOG_LEVEL'] || 'DEBUG'
 
-REDIS_URI = URI.parse(ENV['REDISTOGO_URL'] || 'localhost:6379')
+REDIS_URI = URI.parse(ENV['REDIS_URL'] || 'localhost:6379')
 REDIS = Redis.new(:host => REDIS_URI.host, :port => REDIS_URI.port, :password => REDIS_URI.password)
 
 POST_TIME_KEY = 'POST_TIME'
