@@ -4,7 +4,7 @@ require 'json'
 class Story
   attr_accessor :title, :content, :url
 
-  YUKARIN_TOP_PAGE_URL = 'http://www.tamurayukari.com'
+  YUKARIN_TOP_PAGE_URL = 'https://www.tamurayukari.com'
   MAX_TWEET_SIZE = 117 #http:118 https:117
   SCHEMES = [
     'http://',
