@@ -13,13 +13,14 @@ end
 LOG = Logger.new(STDOUT)
 LOG.level = Logger.const_get ENV['LOG_LEVEL'] || 'DEBUG'
 
+Redis.exists_returns_integer = true
 REDIS_URI = URI.parse(ENV['REDIS_URL'] || 'localhost:6379')
 REDIS = Redis.new(:host => REDIS_URI.host, :port => REDIS_URI.port, :password => REDIS_URI.password)
 
 POST_TIME_KEY = 'POST_TIME'
 INTERVAL = 60 * 60 * 2
 
-if (REDIS.exists(POST_TIME_KEY))
+if (REDIS.exists(POST_TIME_KEY) > 0)
   post_time = Time.parse(REDIS.get(POST_TIME_KEY))
 else
   post_time = Time.now + INTERVAL
@@ -44,7 +45,7 @@ EM::defer do
   loop do
     if post_time < Time.now
       crawler.stories.each do |story|
-        if (REDIS.exists(story.key))
+        if (REDIS.exists(story.key) > 0)
           LOG.info("exists key:#{story.key}")
         else
           LOG.info("#{story.key}:#{story.tweet}")
